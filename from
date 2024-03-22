@@ -1,0 +1,156 @@
+import SelectField from '../common/SelectField';
+import FileUploadField from '../common/FileUploadField';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { useCallback, useState } from 'react';
+import { TEXT_KEYS } from '../../utils/textKeys';
+import Datepicker from '../common/DatePicker';
+import tick from '../../assets/tick.svg';
+// import Button from '../common/Button';
+import { Button } from '../common/button';
+import Popup from '../common/Popup';
+// import { useFormContext } from 'react-hook-form';
+const schema = yup.object().shape({
+	selectRole: yup.string().required('Please select an option'),
+	startDate: yup.string().required('Please select a date'),
+	endDate: yup.string().required('Please select a date'),
+});
+const PAVForm = () => {
+	const {
+		register,
+		setValue,
+		watch,
+		handleSubmit,
+		control,
+		formState: { errors },
+	} = useForm({
+		resolver: yupResolver(schema),
+	});
+	const [open, setOpen] = useState(false);
+	const selectRole = watch('selectRole');
+	const [progress, setProgress] = useState(0);
+
+  const handleFileUploadProgress = useCallback(() => { 
+	const interval = setInterval(() => {
+		setProgress((prevProgress) => {
+		  if (prevProgress < 100) {
+			return prevProgress + 1;
+		  } else {
+			clearInterval(interval);
+			return 100;
+		  }
+		});
+	  }, 50);
+  }, []);
+  
+	return (
+		<div className="text-center justify-center items-center  bg-btn_tertiary_hover h-full w-full flex mt-10">
+			<form
+			onSubmit={handleSubmit()}
+			className=" bg-vfWhite shadow rounded py-10 px-8 w-[610px] h-auto">
+				<div className="mt-1">
+					<h1 className="font-VodafoneRg font- text-2xl">
+						{TEXT_KEYS.PAVForm.INITIATE_ACTIVITY}
+					</h1>
+					<div className="mt-8">
+						<div>
+							<p className="flex justify-start font-VodafoneRg text-sm font-normal text-btn_secondary">
+								{TEXT_KEYS.PAVForm.SELECT_ROLE}
+							</p>
+							<div className="mt-[-4px]">
+								<SelectField
+									name="selectRole"
+									register={register}
+									errors={errors}
+									disabled={false}
+									options={[
+										{ value: null, label: 'Select an option' },
+										{
+											value: 'MacBook Pro | A 3 F K S K T',
+											label: 'MacBook Pro | A 3 F K S K T',
+										},
+										{
+											value: 'ThinkPad L14 Gen3 | A 3 F K S K T',
+											label: 'ThinkPad L14 Gen3 | A 3 F K S K T',
+										},
+										{
+											value: 'Vostro 130 | A 3 F K S K T',
+											label: 'Vostro 130 | A 3 F K S K T',
+										},
+									]}
+									selectedOption={selectRole}
+									onChangeValue={setValue}
+								/>
+							</div>
+						</div>
+
+						<div className="flex gap-5 flex-row justify-between mt-6">
+							<div className="w-[263px]">
+								<p className="flex justify-start font-VodafoneRg text-sm font-normal text-btn_secondary">
+									{TEXT_KEYS.PAVForm.START_DATE}
+								</p>
+								<div className="mt-[-4px]">
+								<Datepicker
+									control={control}
+									name="startDate"
+									errors={errors}
+								/>
+								</div>
+							</div>
+							<div className="w-[263px]">
+								<p className="flex justify-start font-VodafoneRg text-sm font-normal text-btn_secondary">
+									{TEXT_KEYS.PAVForm.END_DATE}
+								</p>
+								<div className="mt-[-4px]">
+									<Datepicker
+										control={control}
+										name="endDate"
+										errors={errors}
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className='mt-6'>
+						<p className="flex justify-start font-VodafoneRg text-sm font-normal text-btn_secondary">{TEXT_KEYS.PAVForm.UPLOAD_FILE}</p>
+						<div className="mt-[-4px]">
+						<FileUploadField name="file" register={register} errors={errors} showProgress={true} startProgress={handleFileUploadProgress} progress={progress}/>
+						</div>
+					</div>
+					<div>
+					<div className="flex place-content-center mt-10 ">
+					<Button
+						onClick={() => setOpen(true)}
+						variant="submitClass"
+						className=" w-[152px] h-11 bg-btn_submit rounded-md"
+					>
+						<p className=" text-center text-white text-lg font-semibold font-VodafoneLt">
+							{TEXT_KEYS.ASSET_VERIFICATION.SUBMIT}
+						</p>
+					</Button>
+				</div>
+				<Popup
+					open={open}
+					additionalClass='w-[610px]'
+					onClose={() => setOpen(false)}
+					title='Activity initiated successfully'
+					body='PAV activity initiated and under progress. You can track the status
+					under activities tab.'
+					actions={[
+						{
+							label: `${TEXT_KEYS.RAISED_TICKET.LABLE_CLOSE}`,
+							type: 'secondaryGrey',
+							onClick: () => setOpen(false),
+						},
+					]}
+					icon={tick}
+				/>
+					</div>
+				</div>
+			</form>
+		</div>
+	);
+};
+
+export default PAVForm;
