@@ -33,6 +33,10 @@ const FileUploadField = ({
 		// Clear the file input value to remove the selected file
 		setSelectedFileName('');
 		setFileSizeMB('');
+		startProgress(0); // Reset progress to 0%
+		const input = document.getElementById(name);
+		input.value = ''; // Reset file input value
+		input.dispatchEvent(new Event('change', { bubbles: true })); // Dispatch change event to trigger file input change event
 	};
 
 	return (
