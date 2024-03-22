@@ -56,6 +56,8 @@ const PAVForm = () => {
 		}, 50);
 	}, []);
 
+	const isButtonDisabled = progress < 100; // Disable button if progress is not 100%
+
 	return (
 		<div className="text-center justify-center items-center bg-btn_tertiary_hover h-full w-full flex mt-10">
 			<form
@@ -137,7 +139,10 @@ const PAVForm = () => {
 							<Button
 								onClick={() => setOpen(true)}
 								variant="submitClass"
-								className="w-[152px] h-11 bg-btn_submit rounded-md"
+								className={`w-[152px] h-11 bg-btn_submit rounded-md ${
+									isButtonDisabled && 'opacity-50 cursor-not-allowed'
+								}`}
+								disabled={isButtonDisabled}
 							>
 								<p className="text-center text-white text-lg font-semibold font-VodafoneLt">
 									{TEXT_KEYS.ASSET_VERIFICATION.SUBMIT}
