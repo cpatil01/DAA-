@@ -58,10 +58,26 @@ const PAVForm = () => {
 
 	const isButtonDisabled = progress < 100; // Disable button if progress is not 100%
 
+	// Function to check if start date and end date are the same
+	const validateDates = (startDate, endDate) => {
+		return startDate !== endDate;
+	};
+
+	const onSubmit = (data) => {
+		const { startDate, endDate } = data;
+		if (!validateDates(startDate, endDate)) {
+			alert('Start date and end date cannot be the same.');
+			return;
+		}
+		// Handle form submission here
+		// For example, set open state to true for the Popup
+		setOpen(true);
+	};
+
 	return (
 		<div className="text-center justify-center items-center bg-btn_tertiary_hover h-full w-full flex mt-10">
 			<form
-				onSubmit={handleSubmit()}
+				onSubmit={handleSubmit(onSubmit)}
 				className="bg-vfWhite shadow rounded py-10 px-8 w-[610px] h-auto"
 			>
 				<div className="mt-1">
@@ -134,7 +150,7 @@ const PAVForm = () => {
 					<div>
 						<div className="flex place-content-center mt-10 ">
 							<Button
-								onClick={() => setOpen(true)}
+								type="submit"
 								variant="submitClass"
 								className={`w-[152px] h-11 bg-btn_submit rounded-md ${
 									isButtonDisabled && 'opacity-50 cursor-not-allowed'
