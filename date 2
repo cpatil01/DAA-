@@ -4,7 +4,7 @@ import { Browse } from '../icons/Browse';
 import FileAttach from '../icons/fileAttach';
 import Left from '../icons/LeftRed';
 import { TEXT_KEYS } from '../../utils/textKeys';
-
+import Remove from '../icons/Remove';
 const FileUploadField = ({
 	label,
 	name,
@@ -88,6 +88,10 @@ const FileUploadField = ({
 								<ProgressBar percent={progress} showPercentage={false} />
 							</div>
 						)}
+						<div>
+							{/* remove  */}
+							<Remove/>
+						</div>
 					</div>
 				</div>
 			)}
