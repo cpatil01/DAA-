@@ -5,6 +5,7 @@ import FileAttach from '../icons/fileAttach';
 import Left from '../icons/LeftRed';
 import { TEXT_KEYS } from '../../utils/textKeys';
 import Remove from '../icons/Remove';
+
 const FileUploadField = ({
 	label,
 	name,
@@ -92,8 +93,8 @@ const FileUploadField = ({
 						)}
 					</div>
 					<div>
-						{/* remove  */}
-						<Remove />
+						{/* Display the Remove icon when progress reaches 100% */}
+						{progress === 100 && <Remove />}
 					</div>
 				</div>
 			)}
