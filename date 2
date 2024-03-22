@@ -1,5 +1,5 @@
 import ProgressBar from './ProgressBar';
-import { useState } from 'react';
+import { useState, useRef } from 'react'; // Import useRef
 import { Browse } from '../icons/Browse';
 import FileAttach from '../icons/fileAttach';
 import Left from '../icons/LeftRed';
@@ -17,6 +17,7 @@ const FileUploadField = ({
 }) => {
 	const [selectedFileName, setSelectedFileName] = useState('');
 	const [fileSizeMB, setFileSizeMB] = useState('');
+	const fileInputRef = useRef(null); // Create a ref for the file input element
 
 	const handleFileChange = (e) => {
 		const file = e.target.files[0];
@@ -33,6 +34,12 @@ const FileUploadField = ({
 		setSelectedFileName('');
 		setFileSizeMB('');
 		startProgress(0); // Reset progress to 0%
+
+		// Trigger file input change event to simulate selecting a new file
+		if (fileInputRef.current) {
+			fileInputRef.current.value = ''; // Clear the current file input value
+			fileInputRef.current.dispatchEvent(new Event('change', { bubbles: true }));
+		}
 	};
 
 	return (
@@ -46,6 +53,7 @@ const FileUploadField = ({
 			<input
 				type="file"
 				id={name}
+				ref={fileInputRef} // Assign the ref to the file input element
 				{...register(name)}
 				className="hidden"
 				onChange={handleFileChange}
