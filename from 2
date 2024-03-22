@@ -56,9 +56,9 @@ const PAVForm = () => {
 		}, 50);
 	}, []);
 
-	const isButtonDisabled = progress < 100; // Disable button if progress is not 100%
+	const isButtonDisabled = progress < 100; 
 
-	// Function to check if start date and end date are the same
+	
 	const validateDates = (startDate, endDate) => {
 		return startDate !== endDate;
 	};
@@ -69,8 +69,6 @@ const PAVForm = () => {
 			alert('Start date and end date cannot be the same.');
 			return;
 		}
-		// Handle form submission here
-		// For example, set open state to true for the Popup
 		setOpen(true);
 	};
 
