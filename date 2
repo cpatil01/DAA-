@@ -29,6 +29,12 @@ const FileUploadField = ({
 		}
 	};
 
+	const handleResetClick = () => {
+		setSelectedFileName('');
+		setFileSizeMB('');
+		startProgress(0); // Reset progress to 0%
+	};
+
 	return (
 		<div className="mb-4 relative">
 			<label
@@ -106,7 +112,7 @@ const FileUploadField = ({
 					<div className="pt-[6px] pl-2">
 						{/* Display the Remove icon when progress reaches 100% */}
 						{progress === 100 && (
-							<button type="reset">
+							<button type="button" onClick={handleResetClick}>
 								<Remove />
 							</button>
 						)}
