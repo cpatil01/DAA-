@@ -71,7 +71,10 @@ const FileUploadField = ({
 					<div className={`w-${progress < 100 ? 'full' : 'auto'} pl-5 `}>
 						<div className="flex justify-between">
 							<div className="font-VodafoneRg text-txt_grey text-sm font-normal">
-								<p>{selectedFileName}</p>
+								<p className={`${progress < 100 ? 'mt-0' : 'mt-[8px]'}`}>
+									{selectedFileName}
+									{/* file size  */}
+								</p>
 							</div>
 							{progress < 100 && (
 								<div>
@@ -92,7 +95,7 @@ const FileUploadField = ({
 							</div>
 						)}
 					</div>
-					<div>
+					<div className="pt-[6px] pl-2">
 						{/* Display the Remove icon when progress reaches 100% */}
 						{progress === 100 && <Remove />}
 					</div>
