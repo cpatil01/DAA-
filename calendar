@@ -1,4 +1,3 @@
-
 import React from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -23,6 +22,7 @@ const Datepicker = ({ label, control, name, errors }) => {
                                 selected={selectedDate}
                                 onChange={onChange}
                                 dateFormat="dd-MM-yyyy"
+                                minDate={new Date()} // Set minDate to today's date
                                 className={`w-full px-4 py-2 border rounded-md pr-10 shadow appearance-none text-text_02 leading-tight focus:outline-none disabled:bg-input_bg disabled:text-txt_input disabled:border-brd_g_200 disabled:shadow-none hover:border-vfAquaBlue focus:shadow-outline focus:border-vfAquaBlue ${
                                     errors[name]
                                         ? 'border-support_01'
@@ -63,4 +63,3 @@ const Datepicker = ({ label, control, name, errors }) => {
 };
 
 export default Datepicker;
-
