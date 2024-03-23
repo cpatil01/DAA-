@@ -11,22 +11,18 @@ import { Button } from '../common/button';
 import Popup from '../common/Popup';
 
 const schema = yup.object().shape({
-	selectRole: yup.string().required('Please select an option'),
-	startDate: yup
-		.string()
-		.required('Please select a date'),
-		// .test('is-not-same-as-end', 'Start date must be different from end date', function(value) {
-		// 	const endDate = this.parent.endDate;
-		// 	return value !== endDate;
-		// }),
-	endDate: yup
-		.string()
-		.required('Please select a date')
-		.test('is-not-same-as-start', 'End date must be different from start date', function(value) {
-			const startDate = this.parent.startDate;
-			return value !== startDate;
-		}),
-		selectedFile: yup
+    selectRole: yup.string().required('Please select an option'),
+    startDate: yup
+        .string()
+        .required('Please select a date'),
+    endDate: yup
+        .string()
+        .required('Please select a date')
+        .test('is-not-same-as-start', 'End date must be different from start date', function(value) {
+            const startDate = this.parent.startDate;
+            return value !== startDate;
+        }),
+    selectedFile: yup
         .mixed()
         .required('File is required')
         .test(
@@ -34,170 +30,162 @@ const schema = yup.object().shape({
             'File is too large',
             (value) => value && value.size <= 10485760 ,
         )
-        // .test('fileType', 'Unsupported file type', (value) => {
-        //     if (!value) return false;
-        //     const allowedTypes = [
-        //         'application/vnd.ms-excel',
-        //         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        //     ];
-        //     return allowedTypes.includes(value[0].type);
-        // }),
 });
 
 const PAVForm = () => {
-	const {
-		register,
-		setValue,
-		watch,
-		handleSubmit,
-		control,
-		formState: { errors },
-	} = useForm({
-		resolver: yupResolver(schema),
-	});
-	const [open, setOpen] = useState(false);
-	const selectRole = watch('selectRole');
-	const [progress, setProgress] = useState(0);
+    const {
+        register,
+        setValue,
+        watch,
+        handleSubmit,
+        control,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(schema),
+    });
+    const [open, setOpen] = useState(false);
+    const selectRole = watch('selectRole');
+    const [progress, setProgress] = useState(0);
+    const [showProgress, setShowProgress] = useState(false); // Add state for showProgress
 
-	const handleFileUploadProgress = useCallback(() => {
-		const interval = setInterval(() => {
-			setProgress((prevProgress) => {
-				if (prevProgress < 100) {
-					return prevProgress + 1;
-				} else {
-					clearInterval(interval);
-					return 100;
-				}
-			});
-		}, 50);
-	}, []);
+    const handleFileUploadProgress = useCallback(() => {
+        setShowProgress(true); // Set showProgress to true when file upload starts
+        const interval = setInterval(() => {
+            setProgress((prevProgress) => {
+                if (prevProgress < 100) {
+                    return prevProgress + 1;
+                } else {
+                    clearInterval(interval);
+                    return 100;
+                }
+            });
+        }, 50);
+    }, []);
 
-	const isButtonDisabled = progress < 100; 
+    const isButtonDisabled = progress < 100;
 
-	
-	const validateDates = (startDate, endDate) => {
-		return startDate !== endDate;
-	};
+    const validateDates = (startDate, endDate) => {
+        return startDate !== endDate;
+    };
 
-	const onSubmit = (data) => {
-		const { startDate, endDate } = data;
-		if (!validateDates(startDate, endDate)) {
-			alert('Start date and end date cannot be the same.');
-			return;
-		}
-		console.log( "data---", data); 
-		setOpen(true);
-	};
+    const onSubmit = (data) => {
+        const { startDate, endDate } = data;
+        if (!validateDates(startDate, endDate)) {
+            alert('Start date and end date cannot be the same.');
+            return;
+        }
+        console.log( "data---", data);
+        setOpen(true);
+    };
 
-	return (
-		<div className="text-center justify-center items-center bg-btn_tertiary_hover h-full w-full flex mt-10">
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				className="bg-vfWhite shadow rounded py-10 px-8 w-[610px] h-auto"
-			>
-				<div className="mt-1">
-					<h1 className="font-VodafoneRg font- text-2xl">
-						{TEXT_KEYS.PAVForm.INITIATE_ACTIVITY}
-					</h1>
-					<div className="mt-8">
-						<div>
-							<p className="flex justify-start font-VodafoneRg text-sm font-normal text-btn_secondary">
-								{TEXT_KEYS.PAVForm.SELECT_ROLE}
-							</p>
-							<div className="mt-[-4px]">
-								<SelectField
-									name="selectRole"
-									register={register}
-									errors={errors}
-									disabled={false}
-									options={[
-										{ value: null, label: 'Select an option' },
-										{
-											value: 'Employees & IT Ops',
-											label: 'Employees & IT Ops',
-										},
-										{
-											value: 'Security Lead',
-											label: 'Security Lead',
-										},
-										
-									]}
-									selectedOption={selectRole}
-									onChangeValue={setValue}
-								/>
-							</div>
-						</div>
+    return (
+        <div className="text-center justify-center items-center bg-btn_tertiary_hover h-full w-full flex mt-10">
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="bg-vfWhite shadow rounded py-10 px-8 w-[610px] h-auto"
+            >
+                <div className="mt-1">
+                    <h1 className="font-VodafoneRg font- text-2xl">
+                        {TEXT_KEYS.PAVForm.INITIATE_ACTIVITY}
+                    </h1>
+                    <div className="mt-8">
+                        <div>
+                            <p className="flex justify-start font-VodafoneRg text-sm font-normal text-btn_secondary">
+                                {TEXT_KEYS.PAVForm.SELECT_ROLE}
+                            </p>
+                            <div className="mt-[-4px]">
+                                <SelectField
+                                    name="selectRole"
+                                    register={register}
+                                    errors={errors}
+                                    disabled={false}
+                                    options={[
+                                        { value: null, label: 'Select an option' },
+                                        {
+                                            value: 'Employees & IT Ops',
+                                            label: 'Employees & IT Ops',
+                                        },
+                                        {
+                                            value: 'Security Lead',
+                                            label: 'Security Lead',
+                                        },
+                                    ]}
+                                    selectedOption={selectRole}
+                                    onChangeValue={setValue}
+                                />
+                            </div>
+                        </div>
 
-						<div className="flex gap-5 flex-row justify-between mt-6">
-							<div className="w-[263px]">
-								<p className="flex justify-start font-VodafoneRg text-sm font-normal text-btn_secondary">
-									{TEXT_KEYS.PAVForm.START_DATE}
-								</p>
-								<div className="mt-[-4px]">
-									<Datepicker control={control} name="startDate" errors={errors} />
-								</div>
-							</div>
-							<div className="w-[263px]">
-								<p className="flex justify-start font-VodafoneRg text-sm font-normal text-btn_secondary">
-									{TEXT_KEYS.PAVForm.END_DATE}
-								</p>
-								<div className="mt-[-4px]">
-									<Datepicker control={control} name="endDate" errors={errors} />
-								</div>
-							</div>
-						</div>
-					</div>
-					<div className="mt-6">
-						<p className="flex justify-start font-VodafoneRg text-sm font-normal text-btn_secondary">
-							{TEXT_KEYS.PAVForm.UPLOAD_FILE}
-						</p>
-						<div className="mt-[-4px]">
-							<FileUploadField
-								name="selectedFile"
-								register={register}
-								errors={errors}
-								showProgress={true}
-								startProgress={handleFileUploadProgress}
-								progress={progress}
-								setValue={setValue}
-							/>
-						</div>
-					</div>
-					<div>
-						<div className="flex place-content-center mt-10 ">
-							<Button
-								type="submit"
-								variant="submitClass"
-								className={`w-[152px] h-11 bg-btn_submit rounded-md ${
-									isButtonDisabled && 'opacity-50 cursor-not-allowed'
-								}`}
-								disabled={isButtonDisabled}
-							>
-								<p className="text-center text-white text-lg font-semibold font-VodafoneLt">
-									{TEXT_KEYS.ASSET_VERIFICATION.SUBMIT}
-								</p>
-							</Button>
-						</div>
-						<Popup
-							open={open}
-							additionalClass="w-[610px]"
-							onClose={() => setOpen(false)}
-							title="Activity initiated successfully"
-							body="PAV activity initiated and under progress. You can track the status under activities tab."
-							actions={[
-								{
-									label: `${TEXT_KEYS.RAISED_TICKET.LABLE_CLOSE}`,
-									type: 'close',
-									onClick: () => setOpen(false),
-								},
-							]}
-							icon={tick}
-						/>
-					</div>
-				</div>
-			</form>
-		</div>
-	);
+                        <div className="flex gap-5 flex-row justify-between mt-6">
+                            <div className="w-[263px]">
+                                <p className="flex justify-start font-VodafoneRg text-sm font-normal text-btn_secondary">
+                                    {TEXT_KEYS.PAVForm.START_DATE}
+                                </p>
+                                <div className="mt-[-4px]">
+                                    <Datepicker control={control} name="startDate" errors={errors} />
+                                </div>
+                            </div>
+                            <div className="w-[263px]">
+                                <p className="flex justify-start font-VodafoneRg text-sm font-normal text-btn_secondary">
+                                    {TEXT_KEYS.PAVForm.END_DATE}
+                                </p>
+                                <div className="mt-[-4px]">
+                                    <Datepicker control={control} name="endDate" errors={errors} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="mt-6">
+                        <p className="flex justify-start font-VodafoneRg text-sm font-normal text-btn_secondary">
+                            {TEXT_KEYS.PAVForm.UPLOAD_FILE}
+                        </p>
+                        <div className="mt-[-4px]">
+                            <FileUploadField
+                                name="selectedFile"
+                                register={register}
+                                errors={errors}
+                                showProgress={showProgress} // Pass showProgress state
+                                startProgress={handleFileUploadProgress}
+                                progress={progress}
+                                setValue={setValue}
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <div className="flex place-content-center mt-10 ">
+                            <Button
+                                type="submit"
+                                variant="submitClass"
+                                className={`w-[152px] h-11 bg-btn_submit rounded-md ${
+                                    isButtonDisabled && 'opacity-50 cursor-not-allowed'
+                                }`}
+                                disabled={isButtonDisabled}
+                            >
+                                <p className="text-center text-white text-lg font-semibold font-VodafoneLt">
+                                    {TEXT_KEYS.ASSET_VERIFICATION.SUBMIT}
+                                </p>
+                            </Button>
+                        </div>
+                        <Popup
+                            open={open}
+                            additionalClass="w-[610px]"
+                            onClose={() => setOpen(false)}
+                            title="Activity initiated successfully"
+                            body="PAV activity initiated and under progress. You can track the status under activities tab."
+                            actions={[
+                                {
+                                    label: `${TEXT_KEYS.RAISED_TICKET.LABLE_CLOSE}`,
+                                    type: 'close',
+                                    onClick: () => setOpen(false),
+                                },
+                            ]}
+                            icon={tick}
+                        />
+                    </div>
+                </div>
+            </form>
+        </div>
+    );
 };
 
 export default PAVForm;
