@@ -15,6 +15,7 @@ const Datepicker = ({ label, control, name, errors }) => {
                 render={({ field: { onChange, value } }) => {
                     
                     const selectedDate = value ? new Date(value) : null;
+                    const today = new Date();
 
                     return (
                         <div className="datepicker-wrapper">
@@ -32,7 +33,9 @@ const Datepicker = ({ label, control, name, errors }) => {
                                 dayClassName={(date) =>
                                     date.toDateString() === selectedDate?.toDateString() // Check if the date matches the selected date
                                         ? 'text-white bg-green-500 rounded-full p-2' // Apply green background to the selected date
-                                        : date < new Date() ? 'text-gray-400 rounded-full p-2' : 'text-text_02 hover:bg-vfRed/70 hover:text-vfWhite rounded-full p-2'
+                                        : date.toDateString() === today.toDateString() // Check if the date is today's date
+                                            ? 'text-white bg-orange-500 rounded-full p-2' // Apply orange background to today's date
+                                            : date < today ? 'text-gray-400 rounded-full p-2' : 'text-text_02 hover:bg-vfRed/70 hover:text-vfWhite rounded-full p-2'
                                 }
                                 monthClassName={(date) =>
                                     'text-text_02 hover:bg-vfRed/70 hover:text-vfWhite rounded-md p-2'
