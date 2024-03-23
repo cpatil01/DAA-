@@ -33,7 +33,9 @@ const Datepicker = ({ label, control, name, errors }) => {
                                 dayClassName={(date) =>
                                     date.toDateString() === selectedDate?.toDateString() 
                                         ? 'text-white bg-vfRed rounded-full p-2'
-                                        : date < new Date() ? 'text-gray-400 rounded-full p-2' : 'text-text_02 hover:bg-vfRed/70 hover:text-vfWhite rounded-full p-2'
+                                        : date.toDateString() === new Date().toDateString()
+                                            ? 'bg-orange-200 rounded-full p-2'
+                                            : date < new Date() ? 'text-gray-400 rounded-full p-2' : 'text-text_02 hover:bg-vfRed/70 hover:text-vfWhite rounded-full p-2'
                                 }
                                 monthClassName={(date) =>
                                     'text-text_02 hover:bg-vfRed/70 hover:text-vfWhite rounded-md p-2'
