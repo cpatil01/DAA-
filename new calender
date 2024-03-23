@@ -31,7 +31,7 @@ const Datepicker = ({ label, control, name, errors }) => {
                                 calendarClassName="bg-white shadow-lg rounded border border-gray-400"
                                 dayClassName={(date) =>
                                     date.toDateString() === new Date().toDateString()
-                                        ? 'text-white bg-vfRed rounded-full p-2' // Green background for today's date
+                                        ? 'text-white bg-vfRed rounded-full p-2'
                                         : date < new Date() ? 'text-gray-400 rounded-full p-2' : 'text-text_02 hover:bg-vfRed/70 hover:text-vfWhite rounded-full p-2'
                                 }
                                 monthClassName={(date) =>
