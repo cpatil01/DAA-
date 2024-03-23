@@ -13,6 +13,7 @@ const Datepicker = ({ label, control, name, errors }) => {
                 control={control}
                 name={name}
                 render={({ field: { onChange, value } }) => {
+                    
                     const selectedDate = value ? new Date(value) : null;
 
                     return (
@@ -22,18 +23,14 @@ const Datepicker = ({ label, control, name, errors }) => {
                                 onChange={onChange}
                                 dateFormat="dd-MM-yyyy"
                                 minDate={new Date()} // Set minDate to today's date
-                                className={`w-full px-4 py-2 border rounded-md pr-10 shadow appearance-none text-text_02 leading-tight focus:outline-none disabled:bg-input_bg disabled:text-txt_input disabled:border-brd_g_200 disabled:shadow-none hover:border-vfAquaBlue focus:shadow-outline focus:border-vfAquaBlue ${
+                                className={`w-full px-4 py-2 border rounded-md pr-10 shadow appearance-none text-text_02 leading-tight focus:outline-none disabled:bg-input_bg disabled:text-txt_input disabled:border-brd_g_200 disabled:shadow-none ${
                                     errors[name]
                                         ? 'border-support_01'
-                                        : 'border-gray-400 hover:border-vfAquaBlue'
+                                        : 'border-gray-400'
                                 }`}
                                 calendarClassName="bg-white shadow-lg rounded border border-gray-400"
                                 dayClassName={(date) =>
-                                    date < new Date() // Check if date is in the past
-                                        ? 'text-text_02 bg-transparent rounded-full p-2' // Past date style
-                                        : selectedDate && date.toDateString() === selectedDate.toDateString()
-                                            ? 'text-white bg-vfRed rounded-full p-2' // Selected date style
-                                            : 'text-text_02 hover:bg-vfRed/70 hover:text-vfWhite rounded-full p-2' // Future date style
+                                    date < new Date() ? 'text-gray-400' : 'text-text_02 hover:bg-vfRed/70 hover:text-vfWhite rounded-full p-2'
                                 }
                                 monthClassName={(date) =>
                                     'text-text_02 hover:bg-vfRed/70 hover:text-vfWhite rounded-md p-2'
@@ -44,7 +41,11 @@ const Datepicker = ({ label, control, name, errors }) => {
                                 popperClassName="min-w-[300px] lg:min-w-[400px] md:min-w-[400px] sm:min-w-[300px]"
                             />
                             <div className="absolute inset-y-[1rem] right-0 flex items-center px-3 pointer-events-none">
-                                <CalendarIcon width="24px" height="24px" className="text-text_02" />
+                                <CalendarIcon
+                                    width="24px"
+                                    height="24px"
+                                    className="text-text_02"
+                                />
                             </div>
                             {errors[name] && (
                                 <p className="text-support_01 text-xs">{errors[name].message}</p>
