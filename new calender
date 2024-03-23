@@ -38,10 +38,10 @@ const Datepicker = ({ label, control, name, errors }) => {
                                             : date < today ? 'text-gray-400 rounded-full p-2' : 'text-text_02 hover:bg-vfRed/70 hover:text-vfWhite rounded-full p-2'
                                 }
                                 monthClassName={(date) =>
-                                    'text-text_02 hover:bg-vfRed/70 hover:text-vfWhite rounded-md p-2'
+                                    'text-text_02 hover:bg-vfRed/70 hover:text-vfWhite rounded-md p-2 bg-red-500' // Apply red background to months
                                 }
                                 yearClassName={(date) =>
-                                    'text-text_02 hover:bg-vfRed/70 hover:text-vfWhite rounded-md p-2'
+                                    'text-text_02 hover:bg-vfRed/70 hover:text-vfWhite rounded-md p-2 bg-red-500' // Apply red background to years
                                 }
                                 popperClassName="min-w-[300px] lg:min-w-[400px] md:min-w-[400px] sm:min-w-[300px]"
                             />
