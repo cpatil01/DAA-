@@ -1,0 +1,97 @@
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Button } from '../common/button';
+import { TEXT_KEYS } from '../../utils/textKeys';
+import InputField from '../common/InputField';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { useNavigate } from 'react-router-dom';
+
+const schema = yup.object().shape({
+	detail: yup
+		.string()
+		.required('Please Enter valid Asset ID')
+		.test(
+			'startsWithA-',
+			'Detail must start with "A-"',
+			(value) => value && value.startsWith('A-'),
+		),
+});
+const ManualVerificationForm = ({ role }) => {
+	const navigate = useNavigate();
+	const {
+		register,
+		handleSubmit,
+		formState: { errors, isValid },
+	} = useForm({
+		resolver: yupResolver(schema),
+	});
+
+	let toLink;
+	switch (role || 'FieldEngineer') {
+		case 'Employee':
+			toLink = '/AsseDetailsVerification';
+			break;
+		case 'FieldEngineer':
+			toLink = '/FEAssetDetailsVerifier';
+			break;
+		default:
+			toLink = '/AssetDetailsVerification';
+			break;
+	}
+	const handleClick = () => {
+		navigate('/AssetDetailsVerification');
+	  };
+
+	return (
+		<div className="flex justify-center sm:content-start sm:bg-text_01 md:bg-btn_tertiary_hover lg:bg-btn_tertiary_hover w-full h-full lg:pb-52 md:pb-72 sm:pb-72 md:content-start lg:content-start p-4 pb-72 pt-0 mt-0 items-center font-vodafoneRg ">
+			<form
+				onSubmit={handleSubmit()}
+				className="w-full md:mt-20 lg:mt-20 max-w-sm bg-text_01 sm:p-0 md:p-8 lg:p-8 rounded-lg"
+			>
+				<h3 className="font-semibold font-vodafoneRg text-base text-tertiary_label sm:text-xl lg:text-2xl sm:text-left md:text-center lg:text-center">
+					{TEXT_KEYS.MANUAL_VERIFICATION.MANUALLY_ENTER_DETAILS}
+				</h3>
+				<div>
+					<div className="pt-8">
+						<label className="font-vodafoneRg text-ui_02 font-normal text-sm">
+							Asset ID/Serial no.
+						</label>
+						<div className="mt-[-8px]">
+							<InputField name="detail" register={register} errors={errors} />
+						</div>
+					</div>
+					<div className="flex justify-between gap-2">
+						
+						<Button variant="close" disabled={!isValid} className="w-full"  onClick={handleClick}>
+							<p className='text-center '>{TEXT_KEYS.ASSET_VERIFICATION.SUBMIT}</p>
+						</Button>
+					</div>
+				</div>
+				<Button
+					as={Link}
+					to="/ScannerVerification"
+					variant="barcodescan"
+					type="button"
+					disabled={!isValid}
+					className="w-full py-2 rounded-md mt-[1rem] bg-vfWhite font-vodafoneLt text-center border border-vfBlack text-vfBlack "
+				>
+					{TEXT_KEYS.MANUAL_VERIFICATION.SCAN_BARCODE}
+				</Button>
+			</form>
+		</div>
+	);
+};
+
+export default ManualVerificationForm;
+// {/* <input
+//                     type="text"
+//                     value={inputValue}
+//                     placeholder={TEXT_KEYS.MANUAL_VERIFICATION.ASSET_ID_SERIAL}
+//                     onChange={handleChange}
+//                     className="w-full mt-[1rem] rounded-md border border-vfBlack px-3 py-2 focus:outline-none focus:border-vfBlack "
+//                 /> */}
+// 				{/* {errorMessage && (
+//                     <p className="text-form_msg text-sm mt-2 mb-0">{errorMessage}</p>
+//                 )} */}
